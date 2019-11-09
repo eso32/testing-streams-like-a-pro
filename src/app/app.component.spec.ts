@@ -21,11 +21,12 @@ describe('MojoFileUploadComponent', () => {
     fixture.detectChanges();
   });
 
-  it('Should make new coffee after order', () => {
-    component.order('expresso');
+  it('Should make new coffee after order', (done) => {
     const expectedCoffee = new Coffee('expresso', 1);
     component.ordersReady$.subscribe(coffee => {
-      expect(coffee).toBe(expectedCoffee);
+      expect(coffee).toEqual(expectedCoffee);
+      done();
     });
+    component.order('expresso');
   });
 });
