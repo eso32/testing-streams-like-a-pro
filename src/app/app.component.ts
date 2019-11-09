@@ -18,10 +18,7 @@ export class AppComponent {
   orderedCoffees = new Subject<Coffee>();
 
   ordersReady$ = this.orderedCoffees
-    .asObservable()
-    .pipe(
-      debounceTime(1000)
-    );
+    .asObservable();
 
   order(type: string) {
     this.orderedCoffees.next(new Coffee(type, 1));
