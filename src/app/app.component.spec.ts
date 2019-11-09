@@ -35,9 +35,8 @@ describe('AppComponent', () => {
     const expresso = new Coffee('expresso', 1);
     const latte = new Coffee('latte', 1);
     const americana = new Coffee('americana', 1);
-
     const expectedCoffees = [expresso, latte, americana];
-    
+
     component.ordersReady$.subscribe(coffee => {
       expect(coffee).toEqual(expectedCoffees[index]);
       index++;
