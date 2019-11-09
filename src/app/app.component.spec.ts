@@ -1,35 +1,31 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { AppComponent, Coffee } from './app.component';
+import { DebugElement } from '@angular/core';
 
-describe('AppComponent', () => {
+describe('MojoFileUploadComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let el: DebugElement;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+      declarations: [ AppComponent ]
+    })
+    .compileComponents();
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'testing-stream-like-a-pro'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('testing-stream-like-a-pro');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    el = fixture.debugElement;
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('testing-stream-like-a-pro app is running!');
+  });
+
+  it('Should make new coffee after order', () => {
+    component.order('expresso');
+    const expectedCoffee = new Coffee('expresso', 1);
+    component.ordersReady$.subscribe(coffee => {
+      expect(coffee).toBe(expectedCoffee);
+    });
   });
 });
