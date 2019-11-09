@@ -2,7 +2,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent, Coffee } from './app.component';
 import { DebugElement } from '@angular/core';
 
-describe('MojoFileUploadComponent', () => {
+describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let el: DebugElement;
