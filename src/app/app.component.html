@@ -1,12 +1,15 @@
 <h1>Testing streams like a pro</h1>
 Order:
-<button (click)="order('express')">expresso</button>
-<button (click)="order('americano')">americano</button>
-<button (click)="order('latte')">latte</button>
-<button (click)="order('machiato')">machiato</button>
-<button (click)="order('lungo')">lungo</button>
+<button (click)="order('express', 1000)">expresso</button>
+<button (click)="order('americano', 3000)">americano</button>
+<button (click)="order('latte', 5000)">latte</button>
+<button (click)="order('machiato', 6000)">machiato</button>
+<button (click)="order('lungo', 7000)">lungo</button>
 <hr>
 Orders ready:
 <span>
   {{ ordersReady$ | async | json }}
 </span>
+<hr>
+Coffee Maker Maintenance<br>
+cycle number: {{coffeeCleaner$ | async}}

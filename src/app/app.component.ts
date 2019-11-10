@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Observable, Subject, timer, interval } from 'rxjs';
+import { debounceTime, delayWhen, take } from 'rxjs/operators';
 
 export class Coffee {
   constructor(
-    private type: string, private table: number
+    public type: string, public preparationTime: number
   ) {}
 }
 
@@ -17,10 +17,17 @@ export class AppComponent {
   waiter$: Observable<Coffee>;
   orderedCoffees = new Subject<Coffee>();
 
-  ordersReady$ = this.orderedCoffees
-    .asObservable();
+  coffeeCleaner$ = interval(700).pipe(take(5));
 
-  order(type: string) {
-    this.orderedCoffees.next(new Coffee(type, 1));
+  ordersReady$ = this.orderedCoffees
+    .asObservable()
+    .pipe(
+      delayWhen((coffee: Coffee) => {
+        return timer(coffee.preparationTime);
+      })
+    );
+
+  order(type: string, preparationTime: number) {
+    this.orderedCoffees.next(new Coffee(type, preparationTime));
   }
 }
