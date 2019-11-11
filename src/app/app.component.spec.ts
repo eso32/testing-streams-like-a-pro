@@ -25,7 +25,7 @@ describe('AppComponent', () => {
     });
   });
 
-  it('customers awaiting', () => {
+  it('Should make new coffee after order', () => {
     scheduler.run(({expectObservable, cold}) => {
       const expected = {
         a: {type: 'expresso', preparationTime: 1000},
