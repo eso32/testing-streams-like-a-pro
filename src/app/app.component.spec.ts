@@ -29,12 +29,12 @@ describe('AppComponent', () => {
 
   it('Should make new coffee after order', () => {
     scheduler.run(({expectObservable, cold}) => {
-      appService.coffees$ = cold('a 2s b', expected);
+      appService.coffees$ = cold('a 1s b', expected);
 
       fixture = TestBed.createComponent(AppComponent);
       component = fixture.componentInstance;
 
-      expectObservable(component.ordersReady$).toBe('1000ms a 4000ms b', expected);
+      expectObservable(component.ordersReady$).toBe('1000ms a 3000ms b', expected);
     });
   });
 
