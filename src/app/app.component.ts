@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable, Subject, timer, interval } from 'rxjs';
-import { debounceTime, delayWhen, take } from 'rxjs/operators';
+import { debounceTime, delayWhen, take, map } from 'rxjs/operators';
+import { AppService } from './app.service';
 
 export class Coffee {
   constructor(
@@ -14,18 +15,22 @@ export class Coffee {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  waiter$: Observable<Coffee>;
-  orderedCoffees = new Subject<Coffee>();
+  waiter$: Observable<any>;
+  orderedCoffees = new Subject<any>();
 
-  coffeeCleaner$ = interval(700).pipe(take(5));
+  coffeeCleaner$ = interval(1000).pipe(take(5));
 
-  ordersReady$ = this.orderedCoffees
-    .asObservable()
+  ordersReady$ = this.appService.users$
     .pipe(
-      delayWhen((coffee: Coffee) => {
-        return timer(coffee.preparationTime);
+      delayWhen((user: any) => {
+        return timer(user.preparationTime);
       })
     );
+
+  customers$ = this.appService.users$;
+
+  constructor(private appService: AppService) {
+  }
 
   order(type: string, preparationTime: number) {
     this.orderedCoffees.next(new Coffee(type, preparationTime));

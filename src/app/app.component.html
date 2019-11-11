@@ -13,3 +13,7 @@ Orders ready:
 <hr>
 Coffee Maker Maintenance<br>
 cycle number: {{coffeeCleaner$ | async}}
+
+<hr>
+Customers awaiting:<br>
+{{ (customers$ | async)?.name }}
