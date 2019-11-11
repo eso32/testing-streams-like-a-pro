@@ -9,9 +9,17 @@ describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   let scheduler: TestScheduler;
   let appService: any;
+  const expected = {
+    a: {type: 'expresso', preparationTime: 1000},
+    b: {type: 'latte', preparationTime: 3000}
+  };
 
   beforeEach(async(() => {
     appService = jasmine.createSpy('AppService');
+    scheduler = new TestScheduler((actual, expectedVal) => {
+      expect(actual).toEqual(expectedVal);
+    });
+
     TestBed.configureTestingModule({
       declarations: [ AppComponent ],
       providers: [{ provide: AppService, useValue: appService }]
@@ -19,29 +27,24 @@ describe('AppComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(() => {
-    scheduler = new TestScheduler((actual, expected) => {
-      expect(actual).toEqual(expected);
-    });
-  });
-
   it('Should make new coffee after order', () => {
     scheduler.run(({expectObservable, cold}) => {
-      const expected = {
-        a: {type: 'expresso', preparationTime: 1000},
-        b: {type: 'latte', preparationTime: 2000}
-      };
-      appService.coffees$ = cold('a 1s b', expected);
+      appService.coffees$ = cold('a 2s b', expected);
+
       fixture = TestBed.createComponent(AppComponent);
       component = fixture.componentInstance;
-      fixture.detectChanges();
 
-      expectObservable(component.ordersReady$).toBe('1000ms a 2000ms b', expected);
+      expectObservable(component.ordersReady$).toBe('1000ms a 4000ms b', expected);
     });
   });
 
   it('Should run self cleaning', () => {
-    scheduler.run(({expectObservable}) => {
+    scheduler.run(({expectObservable, cold}) => {
+      appService.coffees$ = cold('-');
+
+      fixture = TestBed.createComponent(AppComponent);
+      component = fixture.componentInstance;
+
       const expectedObservable = '1s a 999ms b 999ms c 999ms d 999ms (e|)';
       const expectedValues = {a: 0, b: 1, c: 2, d: 3, e: 4};
       const source$ = component.coffeeCleaner$;
