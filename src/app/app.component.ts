@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-import { Observable, Subject, timer, interval } from 'rxjs';
-import { debounceTime, delayWhen, take, map } from 'rxjs/operators';
+import { Observable, timer, interval } from 'rxjs';
+import { delayWhen, take } from 'rxjs/operators';
 import { AppService } from './app.service';
-
-export class Coffee {
-  constructor(
-    public type: string, public preparationTime: number
-  ) {}
-}
+// import { Coffee } from './coffee.class';
 
 @Component({
   selector: 'app-root',
@@ -16,23 +11,23 @@ export class Coffee {
 })
 export class AppComponent {
   waiter$: Observable<any>;
-  orderedCoffees = new Subject<any>();
 
   coffeeCleaner$ = interval(1000).pipe(take(5));
 
-  ordersReady$ = this.appService.users$
+  /**
+   * Multiple coffee can be prepared simultaneously
+   */
+  ordersReady$ = this.appService.coffees$
     .pipe(
-      delayWhen((user: any) => {
-        return timer(user.preparationTime);
+      delayWhen((coffee: any) => {
+        return timer(coffee.preparationTime);
       })
     );
-
-  customers$ = this.appService.users$;
 
   constructor(private appService: AppService) {
   }
 
   order(type: string, preparationTime: number) {
-    this.orderedCoffees.next(new Coffee(type, preparationTime));
+    this.appService.order(type, preparationTime);
   }
 }

@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Observable, interval, from } from 'rxjs';
+import { Observable, interval, from, Subject } from 'rxjs';
 import { take, map } from 'rxjs/operators';
+import { Coffee } from './coffee.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
-  private readonly testData = [{name: 'Anna', preparationTime: 1000}, {name: 'Bert', preparationTime: 2000}];
+  private readonly testData = [
+    {type: 'expresso', preparationTime: 1000},
+    {type: 'latte', preparationTime: 2000}
+  ];
+  private orderedCoffees = new Subject<any>();
 
-  get getUsers(): Observable<any> {
-    return interval(1000).pipe(
-      take(this.testData.length),
-      map(i => this.testData[i])
-    );
+  coffees$ = this.orderedCoffees.asObservable();
+
+  order(type: string, preparationTime: number) {
+    this.orderedCoffees.next(new Coffee(type, preparationTime));
   }
-
-  users$ = from(this.testData);
-
-  constructor() {}
 }
