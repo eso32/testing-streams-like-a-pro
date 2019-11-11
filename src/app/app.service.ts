@@ -8,10 +8,6 @@ import { Coffee } from './coffee.class';
 })
 export class AppService {
 
-  private readonly testData = [
-    {type: 'expresso', preparationTime: 1000},
-    {type: 'latte', preparationTime: 2000}
-  ];
   private orderedCoffees = new Subject<any>();
 
   coffees$ = this.orderedCoffees.asObservable();
